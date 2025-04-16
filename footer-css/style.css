@@ -267,4 +267,34 @@ footer {
     padding: 10px 0;
     box-sizing: border-box;
     margin-top: 20px;
+    gap: 80px;
 }
+.containerc {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 45px;
+    }
+
+    .item1 {
+
+
+      gap: 9px;
+    }
+
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .red {  background: #3f90b5;
+  background: linear-gradient(90deg, rgba(63, 144, 181, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%); }
+    .blue { background: #9adbf5;
+  background: linear-gradient(90deg, rgba(154, 219, 245, 1) 0%, rgba(143, 199, 168, 1) 50%, rgba(247, 244, 203, 1) 100%); }
+    .green {   background: #020024;
+      background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(31, 191, 196, 0.78) 0%, rgba(86, 254, 204, 1) 100%, rgba(84, 192, 255, 1) 100%); }
+    .orange {   background: #200024;
+    background: linear-gradient(90deg, rgba(32, 0, 36, 1) 0%, rgba(139, 110, 224, 0.78) 0%, rgba(243, 192, 252, 1) 100%, rgba(240, 86, 254, 1) 100%, rgba(84, 192, 255, 1) 100%); }
+     .black {  background: #241400;
+     background: linear-gradient(90deg, rgba(36, 20, 0, 1) 0%, rgba(196, 191, 96, 0.78) 0%, rgba(224, 203, 108, 1) 100%, rgba(254, 218, 86, 1) 100%, rgba(255, 224, 84, 1) 100%);}

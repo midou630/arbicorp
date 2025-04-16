@@ -1,9 +1,9 @@
 const services = {
     "Remote Legal Consultation": { url: "service-index/cons.html", icon: "bx bx-right-arrow-alt" },
-    "Mobile Office Consultation": { url: "service-index/cons.html", icon: "bx bx-right-arrow-alt" },
-    "Request to Establish a New Company": { url: "marketing.html", icon: "bx bx-right-arrow-alt" },
-    "Internal Corruption Investigation": { url: "data-analysis.html", icon: "bx bx-right-arrow-alt" },
-    "Corporate Legal Rescue": { url: "content-writing.html", icon: "bx bx-right-arrow-alt" }
+    "Mobile Office Consultation": { url: "service-index/cons-remot.html", icon: "bx bx-right-arrow-alt" },
+    "Request to Establish a New Company": { url: "service-index/request.html", icon: "bx bx-right-arrow-alt" },
+    "Internal Corruption Investigation": { url: "service-index/cora.html", icon: "bx bx-right-arrow-alt" },
+    "Corporate Legal Rescue": { url: "service-index/is3af.html", icon: "bx bx-right-arrow-alt" }
 };
 
 const searchBox = document.getElementById("searchBox");

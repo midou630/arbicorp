@@ -1,9 +1,9 @@
 const services = {
-    "استشارة قانونية عن بعد": { url: "service-index/cons.html", icon: "bx bx-right-arrow-alt" },
-    "استشارات قانونية عبر المكتب المتنقل": { url: "service-index/cons.html", icon: "bx bx-right-arrow-alt" },
-    "طلب انشاء شركة جديدة  ": { url: "marketing.html", icon: "bx bx-right-arrow-alt" },
-    "طلب تحقيق فساد داخلي في الشركة": { url: "data-analysis.html", icon: "bx bx-right-arrow-alt" },
-    "طلب اسعاف شركتك": { url: "content-writing.html", icon: "bx bx-right-arrow-alt" }
+    "استشارة قانونية عن بعد": { url: "service-index/cons-remot-ar.html", icon: "bx bx-right-arrow-alt" },
+    "استشارات قانونية عبر المكتب المتنقل": { url: "service-index/cons-ar.html", icon: "bx bx-right-arrow-alt" },
+    "طلب انشاء شركة جديدة  ": { url: "service-index/request-ar.html", icon: "bx bx-right-arrow-alt" },
+    "طلب تحقيق فساد داخلي في الشركة": { url: "service-index/cora-ar.html", icon: "bx bx-right-arrow-alt" },
+    "طلب اسعاف شركتك": { url: "service-index/is3af-ar.html", icon: "bx bx-right-arrow-alt" }
 };
 
 const searchBox = document.getElementById("searchBox");
