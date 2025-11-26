@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تحرير مذكرة مصلحة | محاكي الإدارة الإلكترونية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; }
+
+body { background: #e6e6e6; padding: 0; margin: 0; }
+
+.a4 {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: white;
+    padding: 25mm;
+    box-shadow: 0 0 5px #777;
+}
+
+.title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 20px; }
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+}
+
+textarea { height: 100px; }
+
+label { font-weight: bold; margin-top: 12px; display: block; }
+
+.btn {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 18px;
+    background: #0b4b82;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.btn-group { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+header {
+    background-color: #0b3d91;
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+</style>
+</head>
+<body>
+
+<header>محاكي الإدارة الإلكترونية - تحرير مذكرة مصلحة</header>
+
+<div class="a4">
+    <h2 style="text-align:center; color:#0b3d91;">تحرير مذكرة مصلحة</h2>
+
+    <label>الولاية:</label>
+    <input type="text" id="wilaya">
+
+    <label>المكان والتاريخ:</label>
+    <input type="text" id="datePlace">
+
+    <label>الجامعة:</label>
+    <input type="text" id="university">
+
+    <label>الأمانة العامة:</label>
+    <input type="text" id="secretariat">
+
+
+    <label>موضوع المذكرة:</label>
+    <textarea id="subject"></textarea>
+
+    <label>المحتوى التفصيلي للمذكرة:</label>
+    <textarea id="contentText"></textarea>
+
+    <hr style="margin:15px 0;">
+
+    <h3 style="color:#0b3d91;">تأكيد الموظف قبل توليد الوثيقة</h3>
+    <label>اسم المستخدم:</label>
+    <input type="text" id="username">
+
+    <label>الرقم السري:</label>
+    <input type="password" id="password">
+
+    <button class="btn" onclick="generateMemo()">توليد المذكرة</button>
+</div>
+
+<script>
+// قائمة المستخدمين
+const users = {
+    "user1":"pass1",
+    "user2":"pass2",
+    "user3":"pass3"
+};
+
+function generateMemo(){
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    if(!users[username] || users[username] !== password){
+        alert("⚠️ اسم المستخدم أو الرقم السري غير صحيح!");
+        return;
+    }
+
+    let data = {
+        wilaya: document.getElementById("wilaya").value,
+        datePlace: document.getElementById("datePlace").value,
+        university: document.getElementById("university").value,
+        secretariat: document.getElementById("secretariat").value,
+        memoNumber: Math.floor(1000 + Math.random() * 9000), // رقم المذكرة تلقائي من 1000 إلى 9999
+        subject: document.getElementById("subject").value,
+        contentText: document.getElementById("contentText").value,
+        signedBy: username,
+        ref: Math.floor(100000 + Math.random() * 900000)
+    };
+
+    localStorage.setItem("memoData", JSON.stringify(data));
+    window.location.href = "memo_document.html";
+}
+</script>
+
+</body>
+</html>

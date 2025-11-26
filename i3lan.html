@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحة الإعلانات | محاكي الإدارة الإلكترونية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { font-family: "Cairo", sans-serif; }
+body { margin:0; background:#f5f6fa; color:#222; }
+
+header {
+    background-color: #0b3d91;
+    color: white;
+    padding: 1rem 2rem;
+    text-align:center;
+    font-size:1.6rem;
+    font-weight:bold;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+
+.container {
+    background:white;
+    width:90%;
+    max-width:900px;
+    margin:2rem auto;
+    padding:2rem;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    animation:fadeIn 0.9s;
+}
+
+h2 { color:#0b3d91; font-size:1.4rem; margin-bottom:1.2rem; text-align:center; }
+
+.card {
+    background:white;
+    border-radius:12px;
+    margin-top:1rem;
+    padding:1rem 1.2rem;
+    border:1px solid #dfe6fd;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    transition:transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover { transform:translateY(-4px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+
+.title { color:#0b3d91; font-weight:bold; font-size:1rem; }
+.small { font-size:0.85rem; color:#666; margin-top:4px; }
+
+@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<header>صفحة الإعلانات</header>
+
+<div class="container">
+    <h2>قائمة الإعلانات الأخيرة</h2>
+    <div id="announcementList"></div>
+</div>
+
+<script>
+function addAnnouncement(text) {
+    let announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+    announcements.unshift({ // نضيف في البداية ليظهر الأحدث أولاً
+        text: text,
+        time: new Date().toLocaleString()
+    });
+    localStorage.setItem("announcements", JSON.stringify(announcements));
+    loadAnnouncements();
+}
+
+function loadAnnouncements() {
+    let announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+    let list = document.getElementById("announcementList");
+    list.innerHTML = "";
+    if (announcements.length === 0) {
+        list.innerHTML = "<p style='text-align:center; color:#666;'>لا توجد إعلانات حتى الآن</p>";
+    }
+    announcements.forEach(a => {
+        list.innerHTML += `
+            <div class="card">
+                <div class="title">${a.text}</div>
+                <div class="small">التاريخ والوقت: ${a.time}</div>
+            </div>
+        `;
+    });
+}
+
+// تحميل الإعلانات عند فتح الصفحة
+loadAnnouncements();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الولوج إلى المنصة</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+
+
+<style>
+
+* {
+    font-family: 'Cairo', sans-serif;  /* أو أي خط اخترته */
+}
+
+
+    body {
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        background: url('background.PNG') center/cover no-repeat;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-box {
+        background: rgba(255,255,255,0.92);
+        padding: 25px;
+        width: 380px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        text-align: center;
+        animation: fadeIn 1s;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 10px;
+        background: #0b3d91;
+        color: white;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+    button:hover {
+        background: #072b63;
+    }
+
+    #infoBox {
+        background: #eef3ff;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 8px;
+        display: none;
+        border-right: 4px solid #0b3d91;
+        text-align: right;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+    <h2>الولوج إلى المنصة</h2>
+    <p>منصة تدريبية لمحاكاة بيئة الإدارة الرقمية بأسلوب حديث ومنظم.</p>
+    <p>النسخة (v 1.0.0)</p>
+
+    <label>الاسم:</label>
+    <input type="text" id="firstName">
+
+    <label>اللقب:</label>
+    <input type="text" id="lastName">
+
+    <button onclick="registerAccess()">تسجيل تاريخ و توقيت الولوج</button>
+
+    <div id="infoBox"></div>
+
+    <label style="margin-top:15px;">الرمز العام للولوج:</label>
+    <input type="password" id="accessCode" placeholder="أدخل الرمز">
+
+    <button onclick="validateAccess()">تأكيد الولوج</button>
+</div>
+
+
+<script>
+// الرمز السري العام
+const MASTER_CODE = "2025ADMIN";
+
+// تسجيل الدخول وإظهار المعلومات
+function registerAccess() {
+    let f = document.getElementById("firstName").value.trim();
+    let l = document.getElementById("lastName").value.trim();
+
+    if (!f || !l) {
+        alert("يرجى إدخال الاسم واللقب");
+        return;
+    }
+
+    let now = new Date();
+    let datetime = now.toLocaleString("ar-DZ");
+
+    document.getElementById("infoBox").style.display = "block";
+    document.getElementById("infoBox").innerHTML =
+        "<b>الاسم و اللقب:</b> " + f + " " + l +
+        "<br><b>تاريخ و توقيت الولوج:</b> " + datetime;
+
+    // حفظ في LocalStorage — للسجلات logs.html
+    let logs = JSON.parse(localStorage.getItem("accessLogs") || "[]");
+    logs.push({
+        name: f + " " + l,
+        time: datetime
+    });
+    localStorage.setItem("accessLogs", JSON.stringify(logs));
+}
+
+// التحقق من الرمز
+function validateAccess() {
+    let code = document.getElementById("accessCode").value;
+
+    if (code === MASTER_CODE) {
+        window.location.href = "index1.html"; // الصفحة الرئيسية
+    } else {
+        alert("الرمز غير صحيح!");
+    }
+}
+</script>
+
+</body>
+</html>

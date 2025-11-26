@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة المستخدمين | محاكي الإدارة الإلكترونية</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+
+  <style>
+  * {
+      font-family: 'Cairo', sans-serif;  /* أو أي خط اخترته */
+  }
+
+
+
+    body {
+      font-family: "Cairo", sans-serif;
+      margin: 0;
+      background-color: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background-color: #0b3d91;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    nav button:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 3rem auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0b3d91;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    th {
+      background-color: #0b3d91;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #eef3ff;
+      cursor: pointer;
+    }
+
+    /* نافذة تسجيل الدخول */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    input {
+      width: 90%;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button.login-btn {
+      background-color: #0b3d91;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button.login-btn:hover {
+      background-color: #062b6f;
+    }
+
+    .close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 25px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      background: #0b3d91;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>محاكي الإدارة الإلكترونية</h1>
+    <nav>
+      <button onclick="location.href='index.html'">الرئيسية</button>
+      <button onclick="location.href='documents.html'">الوثائق</button>
+      <button>حول المنصة</button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>قائمة موظفي الإدارة</h2>
+    <table id="usersTable">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>اللقب</th>
+          <th>المنصب</th>
+        </tr>
+      </thead>
+      <tbody id="usersBody"></tbody>
+    </table>
+  </div>
+
+  <!-- نافذة تسجيل الدخول -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal()">×</button>
+      <h3>تسجيل الدخول</h3>
+      <p id="selectedUser" style="color:#0b3d91; font-weight:bold;"></p>
+      <input type="text" id="username" placeholder="اسم المستخدم">
+      <input type="password" id="password" placeholder="الرقم السري">
+      <p id="errorMsg" class="error"></p>
+      <button class="login-btn" onclick="checkLogin()">دخول</button>
+    </div>
+  </div>
+
+  <footer>
+    جميع الحقوق محفوظة © 2025 - محاكي الإدارة الإلكترونية
+  </footer>
+
+  <script>
+    // قائمة موظفين + بيانات دخولهم
+    const users = [];
+    const positions = ["رئيس مصلحة", "كاتب إدارة", "مكلف بالأرشفة", "مساعد إداري", "تقني إعلام آلي", "رئيس قسم"];
+
+    for (let i = 1; i <= 30; i++) {
+      const name = "الاسم" + i;
+      const lastname = "اللقب" + i;
+      const position = positions[Math.floor(Math.random() * positions.length)];
+      const username = "user" + i;
+      const password = "pass" + i;
+      users.push({ name, lastname, position, username, password });
+    }
+
+    // عرض الموظفين
+    const tbody = document.getElementById("usersBody");
+    users.forEach((u, i) => {
+      tbody.innerHTML += `
+        <tr onclick="openModal(${i})">
+          <td>${u.name}</td>
+          <td>${u.lastname}</td>
+          <td>${u.position}</td>
+        </tr>`;
+    });
+
+    let selectedIndex = null;
+
+    function openModal(index) {
+      selectedIndex = index;
+      document.getElementById("selectedUser").textContent = users[index].name + " " + users[index].lastname;
+      document.getElementById("loginModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("loginModal").style.display = "none";
+      document.getElementById("errorMsg").textContent = "";
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function checkLogin() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const real = users[selectedIndex];
+
+      if (user === real.username && pass === real.password) {
+        window.location.href = "dashboard.html"; // الصفحة التي سنبنيها لاحقًا
+      } else {
+        document.getElementById("errorMsg").textContent = "❌ اسم المستخدم أو الرقم السري غير صحيح";
+      }
+    }
+
+    // إغلاق النافذة عند النقر خارجها
+    window.onclick = function(e) {
+      if (e.target === document.getElementById("loginModal")) closeModal();
+    }
+  </script>
+
+</body>
+</html>

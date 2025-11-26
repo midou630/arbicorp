@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>أرشيف الوثائق | محاكي الإدارة الإلكترونية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+
+  <style>
+
+
+    * {
+        font-family: 'Cairo', sans-serif;  /* أو أي خط اخترته */
+    }
+
+    body {
+      font-family: "Tajawal", sans-serif;
+      margin: 0;
+      background-color: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background-color: #0b3d91;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      display: none;  /* إخفاء المحتوى قبل تسجيل الدخول */
+    }
+
+    .lock-screen {
+      text-align: center;
+      margin-top: 100px;
+      color: #0b3d91;
+    }
+
+    .lock-screen i {
+      font-size: 90px;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+    }
+
+    button {
+      padding: 10px 18px;
+      background: #0b3d91;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #062b6f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    th {
+      background: #0b3d91;
+      color: white;
+    }
+
+    tr:hover {
+      background: #eef3ff;
+    }
+
+    /* نافذة تسجيل دخول */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      width: 300px;
+      padding: 1.8rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>أرشيف الوثائق</h1>
+  <button onclick="openLogin()">تسجيل دخول للبحث</button>
+</header>
+
+<!-- شاشة القفل -->
+<div id="lockScreen" class="lock-screen">
+  <i>🔒</i>
+  <h2>يجب تسجيل الدخول لعرض الأرشيف</h2>
+</div>
+
+<div class="container" id="mainContent">
+  <h2 style="text-align:center; color:#0b3d91;">قائمة الوثائق المؤرشفة</h2>
+
+  <div class="search-box">
+    <input type="text" id="searchRef" placeholder="أدخل الرقم المرجعي للبحث..." disabled>
+    <button onclick="searchDocument()" disabled id="searchBtn">بحث</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>الرقم المرجعي</th>
+        <th>من حررها</th>
+        <th>الصفة</th>
+        <th>الجهة المرسلة إليها</th>
+        <th>تاريخ التحرير</th>
+      </tr>
+    </thead>
+    <tbody id="archiveBody"></tbody>
+  </table>
+</div>
+
+<!-- نافذة تسجيل الدخول -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <h3>تسجيل الدخول</h3>
+    <input id="loginUser" placeholder="اسم المستخدم">
+    <input id="loginPass" type="password" placeholder="الرقم السري">
+    <p id="errorMsg" class="error"></p>
+    <button onclick="checkLogin()">دخول</button>
+  </div>
+</div>
+
+<script>
+  // *******************************
+  //    بيانات الوثائق (50 وثيقة)
+  // *******************************
+  const positions = ["رئيس مصلحة", "كاتب إدارة", "تقني إعلام آلي", "مكلف بالأرشفة", "مساعد إداري"];
+  const destinations = ["الولاية", "الدائرة", "البلدية", "مركز بريد", "إدارة الضرائب"];
+  const archive = [];
+
+  for (let i = 1; i <= 50; i++) {
+    const h = String(Math.floor(Math.random() * 24)).padStart(2, "0");
+    const m = String(Math.floor(Math.random() * 60)).padStart(2, "0");
+    const s = String(Math.floor(Math.random() * 60)).padStart(2, "0");
+
+    archive.push({
+      ref: "REF" + (1000 + i),
+      author: "الموظف " + i,
+      role: positions[Math.floor(Math.random() * positions.length)],
+      to: destinations[Math.floor(Math.random() * destinations.length)],
+      date: `2025-01-${String(i).padStart(2,"0")} ${h}:${m}:${s}`
+    });
+  }
+
+  const body = document.getElementById("archiveBody");
+  archive.forEach(doc => {
+    body.innerHTML += `
+      <tr>
+        <td>${doc.ref}</td>
+        <td>${doc.author}</td>
+        <td>${doc.role}</td>
+        <td>${doc.to}</td>
+        <td>${doc.date}</td>
+      </tr>
+    `;
+  });
+
+  // *******************************
+  //     تسجيل دخول للبحث
+  // *******************************
+  const employees = [
+    {user:"admin1", pass:"pass1"},
+    {user:"archive", pass:"1234"},
+    {user:"mouadh", pass:"0000"}
+  ];
+
+  function openLogin() {
+    document.getElementById("loginModal").style.display = "flex";
+  }
+
+  function checkLogin() {
+    let u = loginUser.value.trim();
+    let p = loginPass.value.trim();
+    const found = employees.find(e => e.user === u && e.pass === p);
+
+    if (!found) {
+      errorMsg.textContent = "❌ معلومات الدخول غير صحيحة";
+      return;
+    }
+
+    // تفعيل البحث بعد الدخول
+    document.getElementById("searchRef").disabled = false;
+    document.getElementById("searchBtn").disabled = false;
+
+    // إظهار المحتوى
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("lockScreen").style.display = "none";
+
+    // سجل الولوج
+    let log = JSON.parse(localStorage.getItem("archiveLog") || "[]");
+    log.push({
+      user: u,
+      time: new Date().toLocaleString(),
+      action: "ولوج إلى الأرشيف"
+    });
+    localStorage.setItem("archiveLog", JSON.stringify(log));
+
+    // إغلاق النافذة
+    loginModal.style.display = "none";
+  }
+
+  // *******************************
+  //         البحث عن وثيقة
+  // *******************************
+  function searchDocument() {
+    let ref = document.getElementById("searchRef").value.trim().toUpperCase();
+    let row = archive.find(doc => doc.ref === ref);
+
+    let log = JSON.parse(localStorage.getItem("archiveLog") || "[]");
+    log.push({
+      user: loginUser.value,
+      time: new Date().toLocaleString(),
+      action: "بحث عن: " + ref
+    });
+    localStorage.setItem("archiveLog", JSON.stringify(log));
+
+    if (!row) {
+      alert("❌ الوثيقة غير موجودة");
+      return;
+    }
+
+    alert(`✔ تم العثور على الوثيقة:\n
+رقم مرجعي: ${row.ref}\n
+المحرر: ${row.author}\n
+الصفة: ${row.role}\n
+مرسلة إلى: ${row.to}\n
+التاريخ: ${row.date}`);
+  }
+</script>
+
+</body>
+</html>

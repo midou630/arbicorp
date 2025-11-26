@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الوثيقة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; }
+body { background: #e6e6e6; padding: 0; margin: 0; }
+.a4 { width: 210mm; min-height: 297mm; margin: auto; background: white; padding: 25mm; box-shadow: 0 0 5px #777; }
+.title { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 40px; }
+td { border: 1px solid #000; padding: 8px; }
+.signature { margin-top: 60px; text-align: left; font-size: 18px; }
+.btn { margin-top: 20px; padding: 10px 20px; font-size: 18px; background: #0b4b82; color: #fff; border: none; border-radius: 7px; cursor: pointer; }
+.btn-group { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div class="a4">
+    <div id="content"></div>
+
+    <!-- زر الطباعة -->
+    <button class="btn" onclick="window.print()">طباعة / PDF</button>
+
+    <!-- زرين الإرسال و الأرشفة -->
+    <div class="btn-group">
+        <button class="btn" onclick="chooseSection()">إرسال</button>
+        <button class="btn" onclick="saveToArchive()">حفظ في الأرشيف</button>
+    </div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("docData"));
+let now = new Date().toLocaleString();
+
+// عرض الوثيقة
+document.getElementById("content").innerHTML = `
+<div class='title'>الجمهورية الجزائرية الديمقراطية الشعبية</div>
+
+<p><b>ولاية:</b> ${data.wilaya}</p>
+<p><b>المكان والتاريخ:</b> ${data.datePlace}</p>
+<p><b>الدائرة:</b> ${data.daira}</p>
+<p><b>البلدية:</b> ${data.baladia}</p>
+
+<h3 style="text-align:center; margin-top:30px;">جدول إرسال</h3>
+
+<table>
+    <tr>
+        <td><b>تعيين الوثائق</b></td>
+        <td><b>العدد</b></td>
+        <td><b>ملاحظات</b></td>
+    </tr>
+    <tr>
+        <td>تجــدون رفقته ...</td>
+        <td>03</td>
+        <td>لإبداء رأيكم و إفادتنا</td>
+    </tr>
+    <tr>
+        <td><b>المجموع</b></td>
+        <td>03</td>
+        <td>بموافقتكم</td>
+    </tr>
+</table>
+
+<p style="margin-top:30px;">رقم مرجعي للوثيقة: <b>${data.ref}</b></p>
+
+<div class="signature">
+    عن السيد رئيس م.ش.ب و بتفويض منه<br>
+    <b>رئيس مصلحة: ${data.serviceChief}</b><br>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=Signature-${data.ref}" style="margin-top:10px;">
+    <br><br>
+    بتاريخ <b>${now}</b> وقعت إلكترونيا من طرف <b>${data.serviceChief}</b>
+</div>
+`;
+
+// ------------------------------
+// اختيار الجهة للإرسال
+// ------------------------------
+function chooseSection(){
+    let section = prompt("اختر الجهة للإرسال:\n1- الجهة الأولى\n2- الجهة الثانية\n3- الجهة الثالثة\n4- الجهة الرابعة");
+    let sections = ["الجهة الأولى","الجهة الثانية","الجهة الثالثة","الجهة الرابعة"];
+    let secName = sections[parseInt(section)-1];
+
+    if(!secName){
+        alert("❌ الجهة غير صحيحة");
+        return;
+    }
+
+    sendToNotifications(secName);
+}
+
+// ------------------------------
+// إرسال الوثيقة مع الجهة
+// ------------------------------
+function sendToNotifications(sectionName) {
+    // جلب الإشعارات الحالية
+    let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+
+    // إضافة الوثيقة للإشعارات مع اسم الجهة ومحتوى الوثيقة
+    notifications.push({
+        type: "إرسال وثيقة",
+        ref: data.ref,
+        date: new Date().toLocaleString(),
+        wilaya: data.wilaya,
+        section: sectionName,
+        content: data  // حفظ محتوى الوثيقة للعرض لاحقاً
+    });
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+
+    // خيار للانتقال مباشرة إلى صفحة الإشعارات لمراجعة الوثيقة
+    if (confirm(`✔ تم إرسال الوثيقة إلى ${sectionName}\nهل تريد الانتقال الآن إلى صفحة الإشعارات لمراجعتها؟`)) {
+        // حفظ المستخدم مؤقتاً بالجهة لتصفية الإشعارات
+        localStorage.setItem("currentUser", JSON.stringify({section: sectionName}));
+        location.href = "notifications.html";
+    }
+}
+
+// ------------------------------
+// حفظ الوثيقة في الأرشيف
+// ------------------------------
+function saveToArchive() {
+    let archive = JSON.parse(localStorage.getItem("archive")) || [];
+
+    archive.push({
+        ref: data.ref,
+        content: data,
+        savedAt: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("archive", JSON.stringify(archive));
+
+    alert("✔ تم حفظ الوثيقة في الأرشيف");
+}
+</script>
+
+</body>
+</html>

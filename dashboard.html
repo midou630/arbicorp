@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | محاكي الإدارة الإلكترونية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    font-family: 'Cairo', sans-serif;
+}
+
+body {
+    font-family: "Cairo", sans-serif;
+    margin: 0;
+    background: #f0f2f7;
+    color: #222;
+}
+
+header {
+    background-color: #0b3d91;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    font-size: 1.5rem;
+}
+
+nav button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+nav button:hover {
+    color: #ffd700;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+h2 {
+    color: #0b3d91;
+    margin-bottom: 2rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.card h3 {
+    color: #0b3d91;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #444;
+}
+
+footer {
+    background: #0b3d91;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>لوحة التحكم</h1>
+    <nav>
+        <button onclick="location.href='dashboard.html'">الصفحة الرئيسية</button>
+        <button onclick="location.href='users.html'">المستخدمون</button>
+        <button onclick="location.href='logs.html'">سجل الولوج</button>
+        <button onclick="location.href='index.html'">تسجيل الخروج</button>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>مرحباً بك في منصة الإدارة الإلكترونية</h2>
+    <p>اختر القسم الذي تريد الوصول إليه من خلال الأزرار التالية:</p>
+
+    <div class="dashboard-grid">
+
+        <div class="card" onclick="location.href='compose.html'">
+            <h3>تحرير المراسلات</h3>
+            <p>أنشئ وثائق إدارية جديدة بسرعة وسهولة.</p>
+        </div>
+
+        <div class="card" onclick="location.href='archive.html'">
+            <h3>إدارة الوثائق</h3>
+            <p>أرشفة وتتبع المستندات الرسمية ومراجعتها.</p>
+        </div>
+
+        <div class="card" onclick="location.href='users1.htm'">
+            <h3>المستخدمون والصلاحيات</h3>
+            <p>عرض وتعديل بيانات الموظفين وصلاحياتهم.</p>
+        </div>
+
+        <div class="card" onclick="location.href='tasjil.html'">
+            <h3>سجل الولوج</h3>
+            <p>عرض جميع الزيارات للمستخدمين مع التواريخ.</p>
+        </div>
+
+        <div class="card" onclick="location.href='report.html'">
+            <h3>الإحصائيات والتقارير</h3>
+            <p>توليد تقارير دقيقة عن إدارة المنصة.</p>
+        </div>
+
+        <div class="card" onclick="location.href='tasjil.html'">
+            <h3>الإعدادات</h3>
+            <p>تخصيص إعدادات المنصة وخيارات المستخدمين.</p>
+        </div>
+
+        <!-- ✔ البطاقة الجديدة التي طلبتها -->
+        <div class="card" onclick="location.href='notifications_login.html'">
+            <h3>الإشعارات / المراسلات الواردة</h3>
+            <p>عرض الوثائق المرسلة إليك بعد تسجيل الدخول.</p>
+        </div>
+        <div class="card" onclick="location.href='i3lan.html'">
+            <h3> الاعلانات</h3>
+            <p>اطلع على جديد مصلحة المستخدمين من هنا .</p>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+<footer>
+    جميع الحقوق محفوظة © 2025 - محاكي الإدارة الإلكترونية
+</footer>
+
+</body>
+</html>

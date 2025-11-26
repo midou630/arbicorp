@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإشعارات الواردة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; }
+body { margin:0; background:#f0f2f7; color:#222; }
+header { background:#0b3d91; color:white; padding:1rem 2rem; text-align:center; font-size:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.container { max-width:900px; margin:2rem auto; padding:2rem; background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.card { background:#ffffff; border-radius:12px; margin-top:1rem; padding:1rem; border:1px solid #dfe6fd; box-shadow:0 2px 6px rgba(0,0,0,0.08); transition: transform 0.3s; }
+.card:hover { transform:translateY(-4px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+.title { color:#0b3d91; font-weight:bold; font-size:1rem; }
+.small { font-size:0.85rem; color:#666; margin-top:4px; }
+.btn-view { margin-top:10px; padding:6px 12px; background:#0b4b82; color:white; border:none; border-radius:5px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header>الإشعارات الواردة</header>
+
+<div class="container" id="notificationsContainer">
+    <h2>مراسلاتك الواردة</h2>
+    <div id="list"></div>
+</div>
+
+<script>
+// التأكد من تسجيل الدخول
+let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if(!currentUser){
+    alert("❌ يرجى تسجيل الدخول أولاً");
+    location.href = "notifications_login.html";
+}
+
+// جلب الإشعارات من localStorage
+let allNotifications = JSON.parse(localStorage.getItem("notifications")) || [];
+let userNotifications = allNotifications.filter(n => n.section === currentUser.section);
+
+let listDiv = document.getElementById("list");
+
+if(userNotifications.length === 0){
+    listDiv.innerHTML = "<p>لا توجد إشعارات جديدة لك.</p>";
+}else{
+    userNotifications.forEach((n,index) => {
+        listDiv.innerHTML += `
+            <div class="card">
+                <div class="title">الوثيقة: ${n.ref}</div>
+                <div class="small">التاريخ: ${n.date}</div>
+                <div class="small">الولاية: ${n.wilaya}</div>
+                <button class="btn-view" onclick="viewDocument(${index})">عرض الوثيقة</button>
+            </div>
+        `;
+    });
+}
+
+// عرض الوثيقة عند الضغط على الزر
+function viewDocument(index){
+    // إذا كان المحتوى موجود ضمن الإشعار، خذ منه، وإلا حاول جلب الوثيقة من المستودع (archive)
+    let doc = userNotifications[index].content;
+    if(!doc){
+        // ابحث في archive
+        let archive = JSON.parse(localStorage.getItem("archive")) || [];
+        doc = archive.find(a => a.ref === userNotifications[index].ref)?.content;
+    }
+    if(!doc){
+        alert("❌ لم يتم العثور على الوثيقة للعرض!");
+        return;
+    }
+
+    // حفظ الوثيقة مؤقتاً في localStorage للعرض
+    localStorage.setItem("docData", JSON.stringify(doc));
+    // فتح صفحة الوثيقة
+    window.open("view_document.html", "_blank");
+}
+</script>
+
+</body>
+</html>

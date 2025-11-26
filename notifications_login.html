@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول - الإشعارات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; }
+body { margin:0; background:#f0f2f7; color:#222; }
+header { background:#0b3d91; color:white; padding:1rem 2rem; text-align:center; font-size:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.container { max-width:400px; margin:5rem auto; padding:2rem; background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center; }
+input { width:100%; padding:12px; margin:8px 0; border-radius:10px; border:1px solid #ccc; font-size:15px; }
+button { width:100%; padding:12px; background:#0b3d91; color:white; border:none; border-radius:10px; font-size:1rem; cursor:pointer; transition:0.3s; }
+button:hover { background:#0a347c; }
+.error { color:red; margin-top:8px; font-size:0.9rem; }
+</style>
+</head>
+<body>
+
+<header>تسجيل الدخول للإشعارات</header>
+
+<div class="container">
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="الرقم السري">
+    <button onclick="login()">دخول</button>
+    <div class="error" id="errorMsg"></div>
+</div>
+
+<script>
+// بيانات المستخدمين لكل جهة
+const users = [
+    {user:"user1", pass:"1111", section:"الجهة الأولى"},
+    {user:"user2", pass:"2222", section:"الجهة الثانية"},
+    {user:"user3", pass:"3333", section:"الجهة الثالثة"},
+    {user:"user4", pass:"4444", section:"الجهة الرابعة"}
+];
+
+function login() {
+    let u = document.getElementById("username").value.trim();
+    let p = document.getElementById("password").value.trim();
+    let found = users.find(x => x.user === u && x.pass === p);
+
+    if(!found){
+        document.getElementById("errorMsg").textContent = "❌ اسم المستخدم أو الرقم السري غير صحيح";
+        return;
+    }
+
+    // حفظ الجهة في localStorage
+    localStorage.setItem("currentUser", JSON.stringify(found));
+
+    // تحويل للصفحة الخاصة بالإشعارات
+    location.href = "notifications.html";
+}
+</script>
+
+</body>
+</html>

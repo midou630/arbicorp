@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المستخدمين</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { font-family: "Cairo", sans-serif; }
+
+body { margin: 0; background-color: #f5f6fa; color: #222; }
+
+/* ====== HEADER ====== */
+header {
+    background-color: #0b3d91;
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ====== CONTAINER ====== */
+.container {
+    background: white;
+    width: 90%;
+    max-width: 850px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    animation: fadeIn 0.9s;
+}
+
+h2 { color: #0b3d91; font-size: 1.4rem; margin-bottom: 1.2rem; }
+
+label { font-weight: bold; margin-top: 1rem; display: block; color: #333; }
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #f1f4ff;
+    font-size: 15px;
+}
+
+textarea { height: 90px; }
+
+/* ====== BUTTON ====== */
+button {
+    width: 100%;
+    padding: 14px;
+    background: #0b3d91;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+button:hover { background: #0a347c; }
+
+/* ====== LOG CARDS ====== */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-top: 1rem;
+    padding: 1.2rem;
+    border: 1px solid #dfe6fd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.title { color: #0b3d91; font-weight: bold; font-size: 1rem; }
+.small { font-size: 0.85rem; color: #666; margin-top: 4px; }
+
+/* ====== LOGIN BOX ====== */
+#loginBox {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(11,61,145,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#loginBox .box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    width: 320px;
+    text-align: center;
+}
+
+#loginBox h2 { color: #0b3d91; margin-bottom: 20px; }
+#loginBox input {
+    width: 100%; padding: 12px; margin: 10px 0;
+    border-radius: 10px; border: 1px solid #ccc;
+    font-size: 15px;
+}
+#loginBox button {
+    width: 100%; padding: 12px;
+    background: #0b3d91; color: #fff;
+    border: none; border-radius: 10px;
+    font-weight: bold; cursor: pointer; margin-top: 10px;
+}
+#loginBox button:hover { background: #0a347c; }
+
+.alert { color: red; font-size: 0.9rem; margin-top: 5px; }
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- شاشة الولوج -->
+<div id="loginBox">
+    <div class="box">
+        <h2>تسجيل الدخول للمنصة</h2>
+        <h2>هذه الخدمة تتطلب ولوج خاص من الهيئة المخولة قانونا</h2>
+        <input id="loginUser" placeholder="اسم المستخدم">
+        <input id="loginPass" type="password" placeholder="كلمة المرور">
+        <input id="loginCode" placeholder="الرقم المميز">
+        <button onclick="login()">ولوج</button>
+        <div class="alert" id="loginAlert"></div>
+    </div>
+</div>
+
+<!-- المحتوى الأصلي -->
+<div id="mainContent" style="display:none">
+
+<header>إدارة المستخدمين</header>
+
+<div class="container">
+    <h2>إضافة موظف جديد</h2>
+    <label>الاسم و اللقب</label>
+    <input id="addName">
+    <label>الوظيفة</label>
+    <input id="addJob">
+    <button onclick="addEmployee()">إضافة الموظف</button>
+</div>
+
+<div class="container">
+    <h2>إحالة موظف على التقاعد</h2>
+    <label>الاسم و اللقب</label>
+    <input id="retName">
+    <label>سبب الإحالة</label>
+    <textarea id="retReason"></textarea>
+    <button onclick="retireEmployee()">إحالة الموظف</button>
+</div>
+
+<div class="container">
+    <h2>ترقية موظف</h2>
+    <label>الاسم و اللقب</label>
+    <input id="promName">
+    <label>الرتبة الجديدة</label>
+    <input id="promRank">
+    <button onclick="promoteEmployee()">ترقية الموظف</button>
+</div>
+
+<div class="container">
+    <h2>عقوبة تأديبية</h2>
+    <label>الاسم و اللقب</label>
+    <input id="discName">
+    <label>نوع العقوبة</label>
+    <select id="discType">
+        <option>إنذار شفهي</option>
+        <option>إنذار كتابي</option>
+        <option>توقيف مؤقت</option>
+        <option>خصم من الراتب</option>
+    </select>
+    <label>تفاصيل إضافية</label>
+    <textarea id="discDetails"></textarea>
+    <button onclick="discipline()">تسجيل العقوبة</button>
+</div>
+
+<div class="container">
+    <h2>سجل العمليات</h2>
+    <div id="logList"></div>
+</div>
+
+</div>
+
+<script>
+// بيانات الولوج الصحيحة
+const VALID_USER = "admin";
+const VALID_PASS = "1234";
+const VALID_CODE = "999";
+
+function login() {
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value.trim();
+    const code = document.getElementById("loginCode").value.trim();
+    const alertMsg = document.getElementById("loginAlert");
+
+    if(user === VALID_USER && pass === VALID_PASS && code === VALID_CODE){
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        loadLogs();
+    } else {
+        alertMsg.textContent = "❌ معلومات الدخول غير صحيحة";
+    }
+}
+
+// === نفس السكربت الأصلي للمستخدمين ===
+function saveLog(entry) {
+    let logs = JSON.parse(localStorage.getItem("usersLog")) || [];
+    logs.push({ text: entry, time: new Date().toLocaleString() });
+    localStorage.setItem("usersLog", JSON.stringify(logs));
+    loadLogs();
+}
+
+function sendAnnouncement(entry) {
+    let ads = JSON.parse(localStorage.getItem("announcements")) || [];
+    ads.unshift({ text: entry, time: new Date().toLocaleString() });
+    localStorage.setItem("announcements", JSON.stringify(ads));
+}
+
+function addEmployee() {
+    let name = addName.value.trim();
+    let job = addJob.value.trim();
+    if (!name || !job) return alert("يرجى ملء جميع الخانات");
+    let entry = `إضافة موظف جديد: ${name} — الوظيفة: ${job}`;
+    saveLog(entry); sendAnnouncement(entry);
+    addName.value = ""; addJob.value = "";
+}
+
+function retireEmployee() {
+    let name = retName.value.trim();
+    let reason = retReason.value.trim();
+    if (!name || !reason) return alert("يرجى ملء جميع الخانات");
+    let entry = `إحالة على التقاعد: ${name} — السبب: ${reason}`;
+    saveLog(entry); sendAnnouncement(entry);
+    retName.value = ""; retReason.value = "";
+}
+
+function promoteEmployee() {
+    let name = promName.value.trim();
+    let rank = promRank.value.trim();
+    if (!name || !rank) return alert("يرجى ملء جميع الخانات");
+    let entry = `ترقية موظف: ${name} — الرتبة الجديدة: ${rank}`;
+    saveLog(entry); sendAnnouncement(entry);
+    promName.value = ""; promRank.value = "";
+}
+
+function discipline() {
+    let name = discName.value.trim();
+    let type = discType.value;
+    let details = discDetails.value.trim();
+    if (!name || !details) return alert("يرجى ملء جميع الخانات");
+    let entry = `عقوبة تأديبية: ${name} — النوع: ${type} — التفاصيل: ${details}`;
+    saveLog(entry); sendAnnouncement(entry);
+    discName.value = ""; discDetails.value = "";
+}
+
+function loadLogs() {
+    let logs = JSON.parse(localStorage.getItem("usersLog")) || [];
+    let list = document.getElementById("logList");
+    list.innerHTML = "";
+    logs.forEach(l => {
+        list.innerHTML += `
+            <div class="card">
+                <div class="title">${l.text}</div>
+                <div class="small">التاريخ: ${l.time}</div>
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

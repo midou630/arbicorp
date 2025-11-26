@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تحرير جدول إرسال | محاكي الإدارة الإلكترونية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+
+
+<style>
+
+  * {
+      font-family: 'Cairo', sans-serif;  /* أو أي خط اخترته */
+  }
+
+    body {
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        background-color: #f5f6fa;
+        color: #222;
+          background: url('background.PNG') center/cover no-repeat;
+    }
+
+    header {
+        background-color: #0b3d91;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+        font-size: 1.4rem;
+    }
+
+    .container {
+        background: #fff;
+        padding: 25px;
+        width: 550px;
+        margin: 40px auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        animation: fadeIn 1s ease;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-family: inherit;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #0b4b82;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #09376a;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+        background: #0b3d91;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 3rem;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>محاكي الإدارة الإلكترونية</h1>
+</header>
+
+
+<div class="container">
+    <h2 style="text-align:center; color:#0b3d91;">تحرير جدول إرسال</h2>
+
+    <label>الولاية:</label>
+    <input type="text" id="wilaya">
+
+    <label>المكان والتاريخ:</label>
+    <input type="text" id="datePlace">
+
+    <label>الدائرة:</label>
+    <input type="text" id="daira">
+
+    <label>البلدية:</label>
+    <input type="text" id="baladia">
+
+    <label>رئيس مصلحة:</label>
+    <input type="text" id="serviceChief">
+
+    <hr style="margin:20px 0;">
+
+    <h3 style="color:#0b3d91;">تأكيد الموظف قبل توليد الوثيقة</h3>
+
+    <label>اسم المستخدم:</label>
+    <input type="text" id="username">
+
+    <label>الرقم السري:</label>
+    <input type="password" id="password">
+
+    <button onclick="generateDocument()">توليد الوثيقة</button>
+</div>
+
+
+<footer>
+    جميع الحقوق محفوظة © 2025 - محاكي الإدارة الإلكترونية
+</footer>
+
+
+
+<script>
+// قائمة المستخدمين المعتمدة
+const users = {
+    "user1": "pass1",
+    "user2": "pass2",
+    "user3": "pass3",
+    "user4": "pass4",
+    "user5": "pass5",
+    "user6": "pass6",
+    "user7": "pass7",
+    "user8": "pass8",
+    "user9": "pass9",
+    "user10": "pass10",
+    "user11": "pass11",
+    "user12": "pass12",
+    "user13": "pass13",
+    "user14": "pass14",
+    "user15": "pass15",
+    "user16": "pass16",
+    "user17": "pass17",
+    "user18": "pass18",
+    "user19": "pass19",
+    "user20": "pass20",
+    "user21": "pass21",
+    "user22": "pass22",
+    "user23": "pass23",
+    "user24": "pass24",
+    "user25": "pass25",
+    "user26": "pass26",
+    "user27": "pass27",
+    "user28": "pass28",
+    "user29": "pass29",
+    "user30": "pass30"
+};
+
+
+function generateDocument() {
+
+    // أولاً → تحقق من حساب الموظف
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    if (!users[username] || users[username] !== password) {
+        alert("⚠️ اسم المستخدم أو الرقم السري غير صحيح!");
+        return;
+    }
+
+    // البيانات الأساسية
+    let data = {
+        wilaya: document.getElementById("wilaya").value,
+        datePlace: document.getElementById("datePlace").value,
+        daira: document.getElementById("daira").value,
+        baladia: document.getElementById("baladia").value,
+        serviceChief: document.getElementById("serviceChief").value,
+        signedBy: username,
+        ref: Math.floor(100000 + Math.random() * 900000) // رقم مرجعي تلقائي
+    };
+
+    localStorage.setItem("docData", JSON.stringify(data));
+
+    window.location.href = "document.html";
+}
+</script>
+
+
+</body>
+</html>

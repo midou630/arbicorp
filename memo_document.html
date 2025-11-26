@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>مذكرة مصلحة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Cairo', sans-serif; }
+body { background: #e6e6e6; padding: 0; margin: 0; }
+
+.a4 {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: white;
+    padding: 25mm;
+    box-shadow: 0 0 5px #777;
+}
+
+.title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 20px; }
+
+p { margin: 6px 0; }
+
+.signature { margin-top: 50px; text-align: left; font-size: 18px; }
+
+.btn { margin-top: 20px; padding: 12px; font-size: 18px; background: #0b4b82; color: #fff; border: none; border-radius: 7px; cursor: pointer; }
+
+.btn-group { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div class="a4">
+    <div id="content"></div>
+
+    <button class="btn" onclick="window.print()">طباعة / PDF</button>
+
+    <div class="btn-group">
+        <button class="btn" onclick="chooseSection()">إرسال</button>
+        <button class="btn" onclick="saveToArchive()">حفظ في الأرشيف</button>
+    </div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("memoData"));
+let now = new Date().toLocaleString();
+
+if(!data){
+    alert("❌ لا توجد مذكرة للعرض!");
+    window.location.href = "memo_form.html"; // العودة لصفحة تحرير المذكرة
+}
+
+// عرض المذكرة
+document.getElementById("content").innerHTML = `
+<div class='title'>الجمهورية الجزائرية الديمقراطية الشعبية</div>
+<p><b>الولاية:</b> ${data.wilaya}</p>
+<p><b>المكان والتاريخ:</b> ${data.datePlace}</p>
+<p><b>الجامعة:</b> ${data.university}</p>
+<p><b>الأمانة العامة:</b> ${data.secretariat}</p>
+<p>رقم المذكرة: <b>${data.memoNumber}</b></p>
+
+
+
+<h3 style="text-align:center; margin-top:30px;">${data.subject}</h3>
+
+<p>${data.contentText}</p>
+
+<div class="signature">
+    <b>الأمين العام: ${data.signedBy}</b><br>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=Signature-${data.ref}" style="margin-top:10px;">
+    <br><br>
+  <br>وقعت إلكترونيا من طرف<b>${data.signedBy} </b>         بتاريخ  <b>${now}</b>
+</div>
+`;
+
+// اختيار الجهة للإرسال
+function chooseSection(){
+    let section = prompt("اختر الجهة للإرسال:\n1- الجهة الأولى\n2- الجهة الثانية\n3- الجهة الثالثة\n4- الجهة الرابعة");
+    let sections = ["الجهة الأولى","الجهة الثانية","الجهة الثالثة","الجهة الرابعة"];
+    let secName = sections[parseInt(section)-1];
+
+    if(!secName){
+        alert("❌ الجهة غير صحيحة");
+        return;
+    }
+
+    sendToNotifications(secName);
+}
+
+// إرسال المذكرة مع الجهة
+function sendToNotifications(sectionName){
+    let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+
+    notifications.push({
+        type: "إرسال مذكرة",
+        ref: data.ref,
+        date: new Date().toLocaleString(),
+        wilaya: data.wilaya,
+        section: sectionName,
+        content: data
+    });
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+
+    if (confirm(`✔ تم إرسال المذكرة إلى ${sectionName}\nهل تريد الانتقال الآن إلى صفحة الإشعارات لمراجعتها؟`)) {
+        localStorage.setItem("currentUser", JSON.stringify({section: sectionName}));
+        window.location.href = "notifications.html";
+    }
+}
+
+// حفظ المذكرة في الأرشيف
+function saveToArchive(){
+    let archive = JSON.parse(localStorage.getItem("archive")) || [];
+
+    archive.push({
+        ref: data.ref,
+        content: data,
+        savedAt: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("archive", JSON.stringify(archive));
+
+    alert("✔ تم حفظ المذكرة في الأرشيف");
+}
+</script>
+
+</body>
+</html>
