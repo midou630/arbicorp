@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>طلب تحويل ملف إداري</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    body{
+        font-family: "Cairo", sans-serif;
+        background:#eef2f5;
+        padding:30px;
+    }
+
+    header{
+        background:#0b3d91;
+        padding:15px;
+        color:white;
+        text-align:center;
+        font-size:22px;
+        font-weight:bold;
+        border-radius:8px;
+        margin-bottom:25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .container{
+        background:#fff;
+        padding:30px;
+        border-radius:12px;
+        width:750px;
+        margin:auto;
+        box-shadow:0 2px 15px #ccc;
+    }
+
+    h2{
+        text-align:center;
+        color:#0b3d91;
+        margin-bottom:20px;
+    }
+
+    input, textarea{
+        width:100%;
+        padding:12px;
+        margin:10px 0;
+        border:1px solid #ccc;
+        border-radius:8px;
+        font-size:15px;
+        background:#fafafa;
+    }
+
+    canvas{
+        border:1px solid #333;
+        background:#fff;
+        border-radius:5px;
+        margin-top:10px;
+        width:100%;
+    }
+
+    .btn{
+        background:#0b4b82;
+        color:white;
+        padding:14px;
+        border:none;
+        border-radius:8px;
+        cursor:pointer;
+        width:100%;
+        font-size:17px;
+        margin-top:15px;
+        font-weight:bold;
+    }
+
+    .btn:hover{
+        background:#093b6a;
+    }
+
+    .verify-box{
+        margin-top:30px;
+        padding:20px;
+        border-radius:10px;
+        border:2px solid #0b3d91;
+        background:#f3f6fb;
+    }
+
+    .verify-box h3{
+        color:#0b3d91;
+        margin-bottom:15px;
+        text-align:center;
+    }
+</style>
+</head>
+
+<body>
+
+<header>محاكي الإدارة الإلكترونية</header>
+
+<div class="container">
+    <h2>طلب تحويل ملف إداري</h2>
+
+    <label>اسم الجامعة</label>
+    <input type="text" id="university">
+
+    <label>اسم الكلية</label>
+    <input type="text" id="faculty">
+
+    <label>الرقم المرجعي</label>
+    <input type="text" id="refNumber" readonly>
+
+    <label>تاريخ اليوم</label>
+    <input type="date" id="date">
+
+    <label>عميد الكلية (المرسل)</label>
+    <input type="text" id="sender">
+
+    <label>الكلية الموجهة إليها</label>
+    <input type="text" id="receiver">
+
+    <label>رقم قرار التعيين</label>
+    <input type="text" id="decisionNumber">
+
+    <label>تاريخ قرار التعيين</label>
+    <input type="date" id="decisionDate">
+
+    <label>اسم الموظف</label>
+    <input type="text" id="employeeName">
+
+    <label>صفة الموظف</label>
+    <input type="text" id="employeeJob">
+
+    <h3>التوقيع الإلكتروني</h3>
+    <canvas id="signature" width="600" height="200"></canvas>
+    <button class="btn" onclick="clearSignature()">مسح التوقيع</button>
+
+    <!-- 🔵 قسم التحقق من الموظف -->
+    <div class="verify-box">
+        <h3>تأكيد الموظف قبل توليد الوثيقة</h3>
+
+        <label>اسم المستخدم:</label>
+        <input type="text" id="username">
+
+        <label>الرقم السري:</label>
+        <input type="password" id="password">
+
+        <label>رقم مميز:</label>
+        <input type="number" id="uniqueCode">
+    </div>
+
+    <button class="btn" onclick="generateDocument()">توليد الوثيقة</button>
+
+</div>
+
+<script>
+// توليد رقم مرجعي تلقائي
+document.getElementById("refNumber").value = "REF-" + Date.now();
+
+// التوقيع
+let canvas = document.getElementById("signature");
+let ctx = canvas.getContext("2d");
+let drawing = false;
+
+canvas.addEventListener("mousedown", ()=> drawing=true);
+canvas.addEventListener("mouseup", ()=> drawing=false);
+canvas.addEventListener("mousemove", draw);
+
+function draw(e){
+    if(!drawing) return;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000";
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+}
+
+function clearSignature(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+// قاعدة بيانات بسيطة
+const users = {
+    "admin":"1234",
+    "user1":"pass1",
+    "user2":"pass2"
+};
+
+// توليد الوثيقة
+function generateDocument(){
+
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let uniqueCode = document.getElementById("uniqueCode").value.trim();
+
+    if(!users[username] || users[username] !== password){
+        alert("⚠️ التحقق فشل: اسم المستخدم أو كلمة المرور غير صحيحة");
+        return;
+    }
+
+    if(uniqueCode.length < 4){
+        alert("⚠️ الرقم المميز يجب أن يحتوي على 4 أرقام على الأقل");
+        return;
+    }
+
+    const signatureImage = canvas.toDataURL();
+
+    const data = {
+        university: university.value,
+        faculty: faculty.value,
+        refNumber: refNumber.value,
+        date: date.value,
+        sender: sender.value,
+        receiver: receiver.value,
+        decisionNumber: decisionNumber.value,
+        decisionDate: decisionDate.value,
+        employeeName: employeeName.value,
+        employeeJob: employeeJob.value,
+        signatureImage: signatureImage,
+        verifiedBy: username,
+        uniqueCode: uniqueCode
+    };
+
+    localStorage.setItem("docData", JSON.stringify(data));
+    window.location.href = "document1.html";
+}
+</script>
+
+</body>
+</html>

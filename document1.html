@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الوثيقة النهائية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: "Cairo", sans-serif; }
+
+body {
+    background: #e6e6e6;
+    padding: 0;
+    margin: 0;
+}
+
+.a4 {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20mm;
+    box-shadow: 0 0 5px #777;
+    line-height: 1.9;
+    font-size: 18px;
+}
+
+.title-center {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 3px 0;
+}
+
+.section-label {
+    font-weight: bold;
+}
+
+.signature {
+    margin-top: 40px;
+    font-size: 18px;
+    text-align: left; /* الآن على اليسار */
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 18px;
+    background: #0b4b82;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.btn-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<div class="a4">
+    <div id="content"></div>
+
+    <div class="btn-group">
+        <button class="btn" onclick="window.print()">طباعة / حفظ PDF</button>
+        <button class="btn" onclick="sendToArchive()">إرسال للأرشيف</button>
+    </div>
+</div>
+
+<script>
+const data = JSON.parse(localStorage.getItem("docData"));
+let now = new Date().toLocaleString();
+
+if(!data){
+    alert("❌ لا توجد وثيقة للعرض!");
+    window.location.href = "document_form.html";
+}
+
+document.getElementById("content").innerHTML = `
+
+<div class="title-center">الجمهورية الجزائرية الديموقراطية الشعبية</div>
+<div class="title-center">وزارة التعليم العالي والبحث العلمي</div>
+<div class="title-center">جامعة ${data.university}</div>
+<div class="title-center">كلية ${data.faculty}</div>
+
+<br>
+
+<p><span class="section-label">الرقم المرجعي:</span> ${data.refNumber}</p>
+<p><span class="section-label">التاريخ:</span> ${data.date}</p>
+
+<br>
+
+<p><span class="section-label">من:</span> عميد كلية ${data.sender}</p>
+<p><span class="section-label">إلى:</span> عميد كلية ${data.receiver}</p>
+
+<h3 style="text-align:center; margin-top:25px;">الموضوع: طلب تحويل ملف إداري</h3>
+
+<p>
+المرجع: قرار التعيين رقم <b>${data.decisionNumber}</b> المؤرخ في <b>${data.decisionDate}</b>
+</p>
+
+<p>
+بناءً على قرار التعيين المشار إليه في المرجع أعلاه، يشرفني أن أطلب منكم
+موافاتي بالملف الإداري الخاص بالسيد(ة) <b>${data.employeeName}</b>
+الذي كان يعمل في مؤسستكم بصفته <b>${data.employeeJob}</b>،
+وذلك في أقرب الآجال لتسوية وضعيته(ا) الإدارية.
+</p>
+
+<div class="signature">
+    <b>عميد الكلية</b><br>
+    ${data.sender}<br><br>
+    <img src="${data.signatureImage}" width="220"><br>
+    <small>حرر بتاريخ: ${now}</small>
+</div>
+
+`;
+
+function sendToArchive(){
+    let archive = JSON.parse(localStorage.getItem("archive")) || [];
+
+    archive.push({
+        refNumber: data.refNumber,
+        content: data,
+        archivedAt: now,
+        editor: data.sender
+    });
+
+    localStorage.setItem("archive", JSON.stringify(archive));
+
+    alert("✔ تم إرسال الوثيقة للأرشيف بنجاح!");
+
+    // فتح صفحة الأرشيف في نافذة جديدة
+    window.open("archive1.html", "_blank");
+}
+</script>
+
+</body>
+</html>

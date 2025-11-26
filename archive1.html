@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الأرشيف - الوثائق المؤرشفة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { font-family: "Cairo", sans-serif; }
+
+body {
+    background: #f2f2f2;
+    padding: 30px;
+    margin: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px #ccc;
+}
+
+h2 {
+    text-align: center;
+    color: #0b3d91;
+    margin-bottom: 25px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #0b3d91;
+    color: white;
+}
+
+.btn {
+    padding: 8px 15px;
+    background: #0b4b82;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background: #09376a;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>الأرشيف - الوثائق المؤرشفة</h2>
+
+    <table id="archiveTable">
+        <thead>
+            <tr>
+                <th>رقم المرجع</th>
+                <th>تاريخ الأرشفة</th>
+                <th>المحرر</th>
+                <th>الموضوع</th>
+                <th>إجراء</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- سيتم ملؤه بواسطة JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+let archive = JSON.parse(localStorage.getItem("archive")) || [];
+const tbody = document.querySelector("#archiveTable tbody");
+
+if(archive.length === 0){
+    tbody.innerHTML = `<tr><td colspan="5">لا توجد وثائق مؤرشفة</td></tr>`;
+} else {
+    archive.forEach((doc, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${doc.refNumber}</td>
+            <td>${doc.archivedAt}</td>
+            <td>${doc.editor}</td>
+            <td>${doc.content.subject || "طلب تحويل ملف إداري"}</td>
+            <td><button class="btn" onclick="viewDocument(${index})">عرض / تحميل</button></td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
+
+// عرض الوثيقة في نافذة جديدة
+function viewDocument(index){
+    const docData = archive[index].content;
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`
+        <html lang="ar" dir="rtl">
+        <head>
+        <meta charset="UTF-8">
+        <title>وثيقة مؤرشفة</title>
+        <style>
+        body { font-family: 'Cairo', sans-serif; padding: 30px; }
+        .a4 { width: 210mm; min-height: 297mm; background: #fff; padding: 20mm; margin: auto; box-shadow:0 0 5px #777; line-height:1.8; }
+        h2, h3 { text-align:center; }
+        .signature { text-align:left; margin-top: 40px; }
+        </style>
+        </head>
+        <body>
+        <div class="a4">
+            <h2>الجمهورية الجزائرية الديموقراطية الشعبية</h2>
+            <h2>وزارة التعليم العالي والبحث العلمي</h2>
+            <h2>جامعة ${docData.university || ""}</h2>
+            <h2>كلية ${docData.faculty || ""}</h2>
+
+            <p>رقم المرجع: <b>${docData.refNumber}</b></p>
+            <p>تاريخ الأرشفة: <b>${archive[index].archivedAt}</b></p>
+            <p>المحرر: <b>${archive[index].editor}</b></p>
+
+            <h3>${docData.subject || "طلب تحويل ملف إداري"}</h3>
+
+            <p>${docData.contentText || "..."}</p>
+
+            <div class="signature">
+                <b>المحرر: ${archive[index].editor}</b><br>
+                <img src="${docData.signatureImage || ''}" width="220"><br>
+            </div>
+        </div>
+        <script>
+            window.print();
+        <\/script>
+        </body>
+        </html>
+    `);
+}
+</script>
+
+</body>
+</html>
