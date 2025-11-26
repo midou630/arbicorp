@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>ARBICORP</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+    <link rel="stylesheet" href="index-ar-en-fr-css/style.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="https://fonts.googleapis.com/css?family=loto|poppins&display=swap" href="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome CDN Link -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="footer-css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+
+
+ * {
+    font-family: 'Cairo', sans-serif;
+  }
+
+
+
+  .video-container {
+    position: relative;
+    width: 100%;
+    height: 120vh;
+    overflow: hidden;
+
+  }
+
+  .video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+  }
+
+  .unmute-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+    <header class="header">
+
+            <a href="index-ar.html" class="logo">
+        <img src="favicon.ico" alt="Logo" class="logo-icon">
+        <a href="index-ar.html" class="logo">ARBICORP</a>
+      </a>
+
+
+        <nav class="navbar">
+
+
+          <a href="index-ar.html">  الرئيسية  <i class='bx bx-home-alt'></i> </a>
+          <a href="#"><i class='bx bx-hard-hat'></i> من نحن </a>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=abdelhamidstartup@gmail.com" target="_blank">
+  <i class='bx bx-chat'></i> تواصل
+  </a>
+
+          <a href="service-index/cons-remot-ar.html"><i class='bx bxs-chalkboard'></i> استشارة </a>
+
+  <a href="service-index/meeting-ar.html"><i class='bx bx-slideshow'></i> مقابلة </a>
+            <!-- زر اختيار اللغة -->
+            <div class="lang-menu">
+                <button class="lang-button" onclick="toggleDropdown()">
+                    <span class="flag-icon flag-icon-dz"></span>
+                </button>
+                <div class="dropdown" id="langDropdown">
+                    <a href="index-ar.html"><span class="flag-icon flag-icon-dz"></span> العربية</a>
+                    <a href="index.html"><span class="flag-icon flag-icon-us"></span> English</a>
+
+                </div>
+            </div>
+
+        </nav>
+
+        <div class="social-media">
+            <a href="#"><i class='bx bxl-tiktok'></i></a>
+            <a href="#"><i class='bx bxl-youtube' ></i></a>
+            <a href="#"><i class='bx bxl-facebook'></i></a>
+            <a href="#"><i class='bx bxl-instagram'></i></a>
+        </div>
+    </header>
+
+
+ 
+
+
+
+<section class="academy-announcement" style="display: flex; justify-content: center; padding: 40px; width: 100%; margin-top: 30px;">
+  <div class="academy-card" 
+marging-top: 300px;       style="background: #0A66C2; border-radius: 22px; padding: 30px; color: white; width: 100%; max-width: 1250px; box-sizing: border-box; ">
+
+   <div class="academy-header" style="text-align: center;">
+  <h2 style="margin: 0; font-size: 28px;">🎓 افتتاح أكاديمية ArBicorp</h2>
+  <p style="opacity: 0.9; margin-top: 10px;">
+    خطوة جديدة لتعزيز معارفك القانونية وتطوير مهاراتك المهنية.
+  </p>
+</div>
+
+
+    <div class="divider" style="height: 1px; background: rgba(255,255,255,0.25); margin: 25px 0;"></div>
+
+    <div class="academy-feature" style="display: flex; align-items: center; margin-bottom: 18px; flex-direction: row-reverse; text-align: right;">
+  <img src="check-circle.svg" style="width: 24px; margin-right: 12px;">
+  <h4 style="margin: 0; font-size: 18px;">    ARBICORP Academy for digital administration       </h4>
+</div>
+
+<div class="academy-feature" style="display: flex; align-items: center; margin-bottom: 18px; flex-direction: row-reverse; text-align: right;">
+  
+  <h4 style="margin: 0; font-size: 18px;">       أكاديمية <strong>ArBicorp</strong> ههي منصة الكترونية مدمجة مبتكرة يتم تطويرها من قبل فريق ArBicorp</strong> خصيصا لدعم التدريب و التكوين في مجلات الادارة الحديثة و تبسيط اليات التحرير الاداري داخل الجامعات و المؤسسات<div class=""></div>       </h4>
+</div>
+
+<div class="academy-feature" style="display: flex; align-items: center; margin-bottom: 18px; flex-direction: row-reverse; text-align: right;">
+ 
+  <h4 style="margin: 0; font-size: 18px;">    تهدف الأكاديمية الى توفير بيئة عمل رقمية حقيقية و عملية تحاكي انظمة و اليات الادارة الالكترونة الحديثة بما يسمح للطلبة و الباحثين و المهنيين و المقبلين على التخرج من فهم سير المعاملات الادارية و اليات استقبال الطلبات و تحويل الملفات و ادارة السجلات و متابعة الاجراءات في نموذج تطبيقي واقعي  نعمل بجد على تطوير الاكاديمية و اضافة خصائص جديدة لتصبح مرجعا رائدا في التدريب الاداري الرقمي و حلا فعالا للمؤسسات التعليمية و المهنية التي تسعى للانتقال نحو ادارة اكثر ذكاءا.مرونة و فعالية و ذلك في اطار رؤيا و توجه الدولة الجزائرية نحو التحول الرقمي و تحقيق مصطلح جزائر رقمية        </h4>
+</div>
+
+
+    <button class="cta" 
+      style="margin-top: 25px; background: white; color: #0A66C2; border: none; padding: 14px 20px; border-radius: 12px; font-size: 17px; cursor: pointer; font-weight: bold; width: 100%;"
+      onclick="location.href='academy/index2.html';">
+      اكتشف الأكاديمية الآن 🚀
+    </button>
+
+  </div>
+</section>
+
+
+
+
+
+  
+
+    <footer>
+      <div class="container">
+        <div class="wrapper">
+          <div class="footer-widget">
+            <a href="#">
+              <img src="images/logo.png" class="logo" />
+            </a>
+            <p class="desc">
+
+<h4>  "نحن هنا لتحويل التحديات القانونية إلى فرص، وحماية شركتك من أي أزمة قد تواجهها." </h4>
+            </p>
+            <ul class="socials">
+              <li>
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-widget">
+            <h6>روابط سريعة</h6>
+            <ul class="links">
+              <li><a href="#"> <h4> الرئيسية </h4> </a></li>
+              <li><a href="#"> <h4> من نحن </h4> </a></li>
+              <li><a href="#"> <h4> تواصل </h4> </a></li>
+            </ul>
+          </div>
+
+          <div class="footer-widget">
+            <h6>الخدمات</h6>
+            <ul class="links">
+              <li><a href="#"> <h4> استشارة عن بعد  </h4> </a></li>
+              <li><a href="#"> <h4>  المكتب المتنقل   </h4> </a></li>
+              <li><a href="#"> <h4>  طلب انشاء شركة  </h4>  </a></li>
+              <li><a href="#"> <h4>  تحقيق في الفساد </h4>  </a></li>
+              <li><a href="#"> <h4>  اسعاف الشركات   </h4> </a></li>
+            </ul>
+          </div>
+
+          <div class="footer-widget">
+            <h6>مساعدة و دعم</h6>
+            <ul class="links">
+              <li><a href="#"> <h4> مركز الدعم </h4> </a></li>
+              <li><a href="#"> <h4> مقابلة عن بعد  </h4> </a></li>
+              <li><a href="#"> <h4>  الخصوصية و الامان  </h4> </a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright-wrapper">
+          <p>
+            Design and Developed by
+            <a href="#">kitouni abdelhamid</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+
+
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById("langDropdown").classList.toggle("show");
+        }
+
+        // إغلاق القائمة عند الضغط خارجها
+        window.onclick = function(event) {
+            if (!event.target.closest('.lang-menu')) {
+                document.getElementById("langDropdown").classList.remove("show");
+            }
+        }
+    </script>
+    <script>
+      function unmuteVideo() {
+        const video = document.getElementById('heroVideo');
+        video.muted = false;
+        video.play();
+      }
+    </script>
+ <script src="script/script1.js"></script> <!-- ربط ملف JavaScript -->
+</body>
+</html>
